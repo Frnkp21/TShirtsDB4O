@@ -134,19 +134,20 @@ public class TShirtsDB4O {
 	public void showCreditCardByCustomerName(String customerName) {
 		List<Customer> customers = db.query(new Predicate<Customer>() {
 			public boolean match(Customer customer) {
-				return customer.getName().compareTo(customerName) == 0;
+				return customer.getName().equalsIgnoreCase(customerName);
 			}
 		});
 		System.out.println("Mostrar tarjeta de crédito por nombre del cliente");
 		for (Customer customer : customers) {
 			System.out.println(customer.getCreditCard());
 		}
+
 	}
 
 	public void showOrdersByCustomerName(String customerName) {
 		List<Order> orders = db.query(new Predicate<Order>() {
 			public boolean match(Order order) {
-				return order.getCustomer().getName().compareTo(customerName) == 0;
+				return order.getCustomer().getName().equalsIgnoreCase(customerName);
 			}
 		});
 		System.out.println("Mostrar pedidos por nombre del cliente");
@@ -156,31 +157,11 @@ public class TShirtsDB4O {
 	}
 
 	public void clearDatabase() {
-		System.out.println("Borrar toda la base de datos");
-		ObjectSet<Article> articles = db.queryByExample(new Article());
-		while (articles.hasNext()) {
-			db.delete(articles.next());
+		ObjectSet<Object> result = db.queryByExample(Object.class);
+		while (result.hasNext()) {
+			db.delete(result.next());
 		}
-
-		ObjectSet<CreditCard> creditCards = db.queryByExample(new CreditCard());
-		while (creditCards.hasNext()) {
-			db.delete(creditCards.next());
-		}
-
-		ObjectSet<Customer> customers = db.queryByExample(new Customer());
-		while (customers.hasNext()) {
-			db.delete(customers.next());
-		}
-
-		ObjectSet<OrderDetail> orderDetails = db.queryByExample(new OrderDetail());
-		while (orderDetails.hasNext()) {
-			db.delete(orderDetails.next());
-		}
-
-		ObjectSet<Order> orders = db.queryByExample(new Order());
-		while (orders.hasNext()) {
-			db.delete(orders.next());
-		}
+		System.out.println("base de datos limpiada");
 	}
 
 	public void deletingArticlesByName(String articleName) {
@@ -194,26 +175,28 @@ public class TShirtsDB4O {
 	}
 
 	public void llistaArticlesByName(String articleName) {
-		List<Article> articles = db.query(new Predicate<Article>() {
+		System.out.println("listar article con nombre");
+		ObjectSet<Article> result = db.query(new Predicate<Article>() {
+			@Override
 			public boolean match(Article article) {
-				return article.getName().compareTo(articleName) == 0;
+				return article.getName().equalsIgnoreCase(articleName);
 			}
 		});
-		System.out.println("Listar artículos por nombre");
-		for (Article article : articles) {
-			System.out.println(article.toString());
+		while (result.hasNext()) {
+			System.out.println(result.next());
 		}
 	}
 
 	public void llistaCustomerByName(String customerName) {
-		List<Customer> customers = db.query(new Predicate<Customer>() {
+		System.out.println("listar customer con nombre");
+		ObjectSet<Customer> result = db.query(new Predicate<Customer>() {
+			@Override
 			public boolean match(Customer customer) {
-				return customer.getName().compareTo(customerName) == 0;
+				return customer.getName().equalsIgnoreCase(customerName);
 			}
 		});
-		System.out.println("Listar clientes por nombre");
-		for (Customer customer : customers) {
-			System.out.println(customer.toString());
+		while (result.hasNext()) {
+			System.out.println(result.next());
 		}
 	}
 
